@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+	gogs-mysql:
+		image: mysql
+		hostname: gogs-mysql
+		volumes:
+			- gogsMysql:/var/lib/mysql	  
+		restart: always
+		environment:
+			MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+		ports:
+			- "3306:3306"
+
+
+	gogs:
+		depends_on:
+			- gogs-mysql
+		image: gogs/gogs
+		restart: 'always'
+		hostname: gogs
+		links:
+			- gogs-mysql
+		ports:
+			- "233:22"
+			- "3000:3000"
+		volumes:
+			- gogsData:/data
+volumes:
+	gogsMysql:
+	gogsData:
